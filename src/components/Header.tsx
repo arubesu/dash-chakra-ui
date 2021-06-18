@@ -45,7 +45,7 @@ export function Header() {
           variant='unstyled'
           px='4'
           mr='4'
-          placeholder='Buscar na Plataforma'
+          placeholder='Search'
           _placeholder={{ color: 'gray.400' }}
         />
         <Icon as={RiSearchLine} fontSize={20} />
