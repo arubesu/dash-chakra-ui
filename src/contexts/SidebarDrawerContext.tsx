@@ -1,6 +1,6 @@
+import { createContext, ReactNode, useContext, useEffect } from "react"
 import { UseDisclosureReturn, useDisclosure } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
-import { createContext, ReactNode, useContext, useEffect } from "react"
 
 interface SidebarDrawerProviderProps {
   children: ReactNode;
