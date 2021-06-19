@@ -20,6 +20,7 @@ export function Input({ name, label, ...rest }: InputProps) {
         id={name}
         focusBorderColor='gray.900'
         borderColor='gray.900'
+        bg='gray.900'
         variant='filled'
         _hover={{
           bgColor:
