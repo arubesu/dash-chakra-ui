@@ -10,7 +10,7 @@ export function Pagination() {
       spacing='6'>
 
       <Box>
-        <Text as='strong'> 3 </Text>
+        <Text as='strong'> 1 </Text>
         -
         <Text as='strong'> 10 </Text>
         de

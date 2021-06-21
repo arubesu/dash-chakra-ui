@@ -1,13 +1,45 @@
 import { Box, Button, Flex, Heading, Table, Th, Tr, Td, Thead, Tbody, Checkbox, Text, Icon } from "@chakra-ui/react"
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/Sidebar";
+import api from "../../services/api";
+
+interface User {
+  name: string;
+  email: string;
+  registered_date: string;
+}
 
 export default function UserList() {
+  const [users, setUsers] = useState([] as User[])
+
+  useEffect(() => {
+    api.get('/api', {
+      params: {
+        inc: 'name,email,registered',
+        results: 10
+      }
+    }).then(({ data }) => {
+
+      const users = data.results.map(user => ({
+        name: `${user.name.first} ${user.name.last}`,
+        email: user.email,
+        registered_date: Intl.DateTimeFormat('us-en',
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }).format(new Date(user.registered.date))
+      }))
+
+      setUsers(users);
+    })
+  }, [])
+
   return (
     <Box>
       <Header />
@@ -60,78 +92,37 @@ export default function UserList() {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td px='6'>
-                  <Checkbox colorScheme='pink' />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight='bold'>Bruno Souza</Text>
-                    <Text fontSize='sm' color='gray.300'>bruno.arubesu@gmail.com</Text>
-                  </Box>
-                </Td>
-                <Td >
-                  July 15th, 2021
-                </Td>
-                <Td >
-                  <Button
-                    as='a'
-                    size='sm'
-                    fontSize='sm'
-                    colorScheme='purple'
-                    leftIcon={<Icon as={RiPencilLine} fontSize={16} />}>
-                    Edit
+              {
+                users.map((user => (
+                  <Tr key={user.email}>
+                    <Td px='6'>
+                      <Checkbox colorScheme='pink' />
+                    </Td>
+                    <Td>
+                      <Box>
+                        <Text fontWeight='bold'>{user.name}</Text>
+                        <Text fontSize='sm' color='gray.300'>{user.email}</Text>
+                      </Box>
+                    </Td>
+                    <Td >
+                      {
+                        user.registered_date
+                      }
+                    </Td>
+                    <Td >
+                      <Button
+                        as='a'
+                        size='sm'
+                        fontSize='sm'
+                        colorScheme='purple'
+                        leftIcon={<Icon as={RiPencilLine} fontSize={16} />}>
+                        Edit
                   </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td px='6'>
-                  <Checkbox colorScheme='pink' />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight='bold'>Bruno Souza</Text>
-                    <Text fontSize='sm' color='gray.300'>bruno.arubesu@gmail.com</Text>
-                  </Box>
-                </Td>
-                <Td >
-                  July 15th, 2021
-                </Td>
-                <Td >
-                  <Button
-                    as='a'
-                    size='sm'
-                    fontSize='sm'
-                    colorScheme='purple'
-                    leftIcon={<Icon as={RiPencilLine} fontSize={16} />}>
-                    Edit
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td px='6'>
-                  <Checkbox colorScheme='pink' />
-                </Td>
-                <Td>
-                  <Box>
-                    <Text fontWeight='bold'>Bruno Souza</Text>
-                    <Text fontSize='sm' color='gray.300'>bruno.arubesu@gmail.com</Text>
-                  </Box>
-                </Td>
-                <Td >
-                  July 15th, 2021
-                </Td>
-                <Td >
-                  <Button
-                    as='a'
-                    size='sm'
-                    fontSize='sm'
-                    colorScheme='purple'
-                    leftIcon={<Icon as={RiPencilLine} fontSize={16} />}>
-                    Edit
-                  </Button>
-                </Td>
-              </Tr>
+                    </Td>
+                  </Tr>
+                )))
+              }
+
             </Tbody>
           </Table>
           <Pagination />
